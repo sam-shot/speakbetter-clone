@@ -152,3 +152,19 @@ label {
 .footer p {
     font-weight: 300;
 }
+
+
+@media(max-width: 600px){
+  #right{
+    display: none;
+  }
+  #left-body {
+  width: 90%;
+}
+#get-started{
+  width: 100%;
+}
+#signin form {
+  width: 100%;
+}
+}
