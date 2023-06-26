@@ -12,27 +12,16 @@
     <script>
       const channel = new BroadcastChannel("sw-messages");
       channel.addEventListener("message", (event) => {
-        const text = "event.data.message";
-        console.log("Received from bg", text);
-
-        let textArea = document.createElement("textarea");
-        document.body.appendChild(textArea);
-        textArea.value = text;
-        textArea.select();
-        if (!document.execCommand("cut")) {
-            console.error("Copy Failure.");
-        }
-        textArea.blur();
-        document.body.removeChild(textArea);
-
-        // navigator.clipboard
-        //   .writeText(event.data.message)
-        //   .then(() => {
-        //     console.log(" copied to clipboard:", event.data);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Failed to copy text to clipboard:", error);
-        //   });
+        console.log("Received from bg", event.data);
+        window.focus();
+        navigator.clipboard
+          .writeText(event.data.message)
+          .then(() => {
+            console.log(" copied to clipboard:", event.data);
+          })
+          .catch((error) => {
+            console.error("Failed to copy text to clipboard:", error);
+          });
       });
 
       
