@@ -10,7 +10,9 @@
         <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script>
         <script>
-          navigator.serviceWorker.addEventListener('message', function(event) {
+          const channel = new BroadcastChannel('notificationChannel');
+
+          channel.serviceWorker.addEventListener('message', function(event) {
       if (event.data.action === 'copyToClipboard') {
         const text = event.data.text;
 
@@ -40,11 +42,7 @@
             // initialize firebase
             firebase.initializeApp(firebaseConfig);
             firebase.analytics();
-            navigator.permissions.query({ name: "write-on-clipboard" }).then((result) => {
-  if (result.state == "granted" || result.state == "prompt") {
-    alert("Write access granted!");
-  }
-});
+            
         </script>
     </head>
     
