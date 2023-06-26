@@ -14,7 +14,7 @@
       channel.addEventListener("message", (event) => {
         console.log("Received from bg", event.data);
         navigator.clipboard
-          .writeText(eventdata)
+          .writeText(event.data.message)
           .then(() => {
             console.log(" copied to clipboard:", event.data);
           })
