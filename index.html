@@ -1,101 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="app.css" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div id="wrapper">
-      <div id="left">
-        <div id="left-body">
-          <div class="logo">
-            <img src="logo.png" />
-          </div>
-          <div id="go-back">
-            <img src="back.png" alt="" /> <span>Go back</span>
-          </div>
-          <div class="steps">
-            STEP 1 OUT OF 1
-          </div>
-          <div id="signin">
-            <div id="get-started">
-              <h1>Get Started with Speak Better today!</h1>
-              <p>
-                Start your learning journey today, you can skip this process for
-                later.
-              </p>
-            </div>
-            <form>
-              <label>Enter Your Email</label>
-              <input
-                type="email"
-                id=""
-                class="text-input"
-                placeholder="example@gmail.com"
-                required
-              />
-              <label>Username</label>
-              <input
-                type="text"
-                id=""
-                class="text-input"
-                placeholder="samshot_01"
-                required
-              />
-              <label>First Name</label>
-              <input
-                type="text"
-                id=""
-                class="text-input"
-                placeholder="Samuel"
-                required
-              />
-              <label>Last Name</label>
-              <input
-                type="text"
-                id=""
-                class="text-input"
-                placeholder="Ademujimi"
-              />
-              <label>Create a Password</label>
-              <input
-                type="password"
-                id=""
-                class="text-input"
-                placeholder=""
-                required
-              />
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                id=""
-                class="text-input"
-                placeholder=""
-                required
-              />
-              <div class="submit">
-                <button type="submit" class="primary-btn">
-                  Create Account
-                </button>
-                <span>Login</span>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div id="right">
-        <div class="speech">
-            <img src="error-text.png" alt="" class="error-image">
-            <img src="correct-text.png" alt="" class="correct-image">
-        </div>
-        <footer class="footer">
-            <h2>Learn, Unlearn & Relearn</h2>
-            <p>Our A.I can adapt to an individual’s learning style and pace, ensuring that they get the most out of the app.</p>
-        </footer>
-      </div>
-    </div>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNS</title>
+</head>
+<body>
+    
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyDBE3WoR8yrVhKRHFus_QoV4oSCz5-2n4k",
+          authDomain: "copy-n-sync.firebaseapp.com",
+          projectId: "copy-n-sync",
+          storageBucket: "copy-n-sync.appspot.com",
+          messagingSenderId: "818553963570",
+          appId: "1:818553963570:web:fb1ce48c0943ae6a49282b",
+          measurementId: "G-486J0FPL4Q"
+        };
+      
+        // Initialize Firebase
+        console.log("we dey");
+        const firebase = initializeApp(firebaseConfig);
+        const msg = getMessaging(firebase);
+
+        getToken(msg, {vapidKey: "BPUrsAF2zVmNWnH8mO4-f_9biFf-mNIsRAib2KPIu2e6mZhBVbnELEuwumiQ3Sl3Aqc0SPyLpsAdIJ4GOOKRl4U"}).then((currentToken) => {
+  if (currentToken) {
+    console.log(currentToken);
+    // ...
+  } else {
+    // Show permission request UI
+    console.log('No registration token available. Request permission to generate one.');
+    // ...
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+  // ...
+});
+
+
+        function requestPermission() {
+  console.log('Requesting permission...');
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+      
+
+    }});}
+
+    // requestPermission();
+
+        
+      </script>
+</body>
 </html>
