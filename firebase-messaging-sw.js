@@ -41,11 +41,29 @@ messaging.setBackgroundMessageHandler(async function(payload) {
         console.error('Failed to copy');
         /* Rejected - text failed to copy to the clipboard */
       });
+
+
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({ type: 'copyToClipboard', text: payload.data.message });
+        });
+      });
       
     return self.registration.showNotification(
         notificationTitle,
         notificationOptions
     );
 });
+
+self.addEventListener('message',() => {
+    if (text) {
+      // Send a message to the web page
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({ type: 'copyToClipboard', text});
+        });
+      });
+    }
+  });
 
 

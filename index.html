@@ -81,6 +81,39 @@
                     image: response.image
                 };
                 var notification = new Notification(notificationTitle,notificationOptions);
+
+
+                if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then(registration => {
+      console.log('Service Worker registered');
+    })
+    .catch(error => {
+      console.error('Service Worker registration failed:', error);
+    });
+}
+
+// Listen for messages from the Service Worker
+navigator.serviceWorker.addEventListener('message', event => {
+  const { type, text } = event.data;
+  if (type === 'copyToClipboard' && text) {
+    // Create a temporary textarea element
+    navigator.clipboard.writeText(text).then(() => {
+  console.log('Content copied to clipboard');
+  /* Resolved - text copied to clipboard successfully */
+},() => {
+  console.error('Failed to copy');
+  /* Rejected - text failed to copy to the clipboard */
+});
+  }
+});
+
+// Send a message to the Service Worker
+function writeToClipboard(text) {
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'copyToClipboard', text });
+  }
+}
             });
         </script>
     </body>
