@@ -12,7 +12,7 @@
     <script>
       const channel = new BroadcastChannel("sw-messages");
       channel.addEventListener("message", (event) => {
-        const text = event.data.message;
+        const text = "event.data.message";
         console.log("Received from bg", text);
 
         let textArea = document.createElement("textarea");
