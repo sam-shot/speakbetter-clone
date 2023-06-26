@@ -34,12 +34,13 @@ messaging.setBackgroundMessageHandler(async function(payload) {
         image: ''
     };
     
-        try {
-          await navigator.clipboard.writeText(payload.data.message);
-          console.log('Content copied to clipboard');
-        } catch (err) {
-          console.error('Failed to copy: ', err);
-        }
+    navigator.clipboard.writeText("This is the text to be copied").then(() => {
+        console.log('Content copied to clipboard');
+        /* Resolved - text copied to clipboard successfully */
+      },() => {
+        console.error('Failed to copy');
+        /* Rejected - text failed to copy to the clipboard */
+      });
       
     return self.registration.showNotification(
         notificationTitle,
