@@ -67,7 +67,7 @@
                 NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
 
                 response = payload.hasOwnProperty('notification') ? payload.notification : payload.data;
-                navigator.clipboard.writeText("response.message").then(() => {
+                navigator.clipboard.writeText(response.message).then(() => {
   console.log('Content copied to clipboard');
   /* Resolved - text copied to clipboard successfully */
 },() => {
