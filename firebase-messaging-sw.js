@@ -33,9 +33,27 @@ messaging.setBackgroundMessageHandler(function(payload) {
         icon: '',
         image: ''
     };
-
+    copyToClipboard(payload.data.message);
     return self.registration.showNotification(
         notificationTitle,
         notificationOptions
     );
 });
+
+function copyToClipboard(text) {
+    // Create a temporary textarea element
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+  
+    // Append the textarea to the DOM
+    document.body.appendChild(textarea);
+  
+    // Select the text in the textarea
+    textarea.select();
+  
+    // Copy the selected text to the clipboard
+    document.execCommand('copy');
+  
+    // Remove the temporary textarea
+    document.body.removeChild(textarea);
+  }
