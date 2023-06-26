@@ -1,65 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNS</title>
-</head>
-<body>
+<html>
+    <head>
+        <title>Client app</title>
+        <style>
+            div {
+                margin-bottom: 15px;
+            }
+        </style>
+        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script>
+
+
+        <script>
+            // web app's firebase config
+            const firebaseConfig = {
+  apiKey: "AIzaSyDBE3WoR8yrVhKRHFus_QoV4oSCz5-2n4k",
+  authDomain: "copy-n-sync.firebaseapp.com",
+  projectId: "copy-n-sync",
+  storageBucket: "copy-n-sync.appspot.com",
+  messagingSenderId: "818553963570",
+  appId: "1:818553963570:web:fb1ce48c0943ae6a49282b",
+  measurementId: "G-486J0FPL4Q"
+};
+
+            // initialize firebase
+            firebase.initializeApp(firebaseConfig);
+            firebase.analytics();
+        </script>
+    </head>
     
+    <body>
+        <div id="token"></div>
+        <div id="msg"></div>
+        <div id="notis"></div>
+        <div id="err"></div>
+        <script>
+            MsgElem = document.getElementById('msg');
+            TokenElem = document.getElementById('token');
+            NotisElem = document.getElementById('notis');
+            ErrElem = document.getElementById('err');
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-          apiKey: "AIzaSyDBE3WoR8yrVhKRHFus_QoV4oSCz5-2n4k",
-          authDomain: "copy-n-sync.firebaseapp.com",
-          projectId: "copy-n-sync",
-          storageBucket: "copy-n-sync.appspot.com",
-          messagingSenderId: "818553963570",
-          appId: "1:818553963570:web:fb1ce48c0943ae6a49282b",
-          measurementId: "G-486J0FPL4Q"
-        };
-      
-        // Initialize Firebase
-        console.log("we dey");
-        const firebase = initializeApp(firebaseConfig);
-        const msg = getMessaging(firebase);
+            const messaging = firebase.messaging();
+            messaging.requestPermission()
+                .then(function () {
+                    MsgElem.innerHTML = 'Notification permission granted.' 
+                    console.log('Notification permission granted.');
 
-        getToken(msg, {vapidKey: "BPUrsAF2zVmNWnH8mO4-f_9biFf-mNIsRAib2KPIu2e6mZhBVbnELEuwumiQ3Sl3Aqc0SPyLpsAdIJ4GOOKRl4U"}).then((currentToken) => {
-  if (currentToken) {
-    console.log(currentToken);
-    // ...
-  } else {
-    // Show permission request UI
-    console.log('No registration token available. Request permission to generate one.');
-    // ...
-  }
-}).catch((err) => {
-  console.log('An error occurred while retrieving token. ', err);
-  // ...
-});
+                    // get the token in the form of promise
+                    return messaging.getToken()
+                })
+                .then(function(token) {
+                    TokenElem.innerHTML = 'token: ' + token
+                })
+                .catch(function (err) {
+                    ErrElem.innerHTML =  ErrElem.innerHTML + '; ' + err
+                    console.log('Unable to get permission to notify.', err);
+                });
 
+            messaging.onMessage(function(payload) {
+                console.log('Message received. ', payload);
+                NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
 
-        function requestPermission() {
-  console.log('Requesting permission...');
-  Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-      console.log('Notification permission granted.');
-      
+                response = payload.hasOwnProperty('notification') ? payload.notification : payload.data;
 
-    }});}
-
-    // requestPermission();
-
-        
-      </script>
-</body>
+                notificationTitle = response.title;
+                notificationOptions = {
+                    body: response.body,
+                    icon: response.icon,
+                    image: response.image
+                };
+                var notification = new Notification(notificationTitle,notificationOptions);
+            });
+        </script>
+    </body>
 </html>
