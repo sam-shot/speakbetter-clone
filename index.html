@@ -1,99 +1,104 @@
 <html>
-    <head>
-        <title>Client app</title>
-        <style>
-            div {
-                margin-bottom: 15px;
-            }
-        </style>
-        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script>
-        <script>
-          
-
-          const channel = new BroadcastChannel('sw-messages');
-channel.addEventListener('message', event => {
-    console.log('Received from bg', event.data);
-});
-
-          channel.serviceWorker.addEventListener('message', function(event) {
-      if (event.data.action === 'copyToClipboard') {
-        const text = event.data.text;
-
-        
+  <head>
+    <title>Client app</title>
+    <style>
+      div {
+        margin-bottom: 15px;
       }
-    });
-        </script>
-
-        <script>
-            // web app's firebase config
-            const firebaseConfig = {
-  apiKey: "AIzaSyDBE3WoR8yrVhKRHFus_QoV4oSCz5-2n4k",
-  authDomain: "copy-n-sync.firebaseapp.com",
-  projectId: "copy-n-sync",
-  storageBucket: "copy-n-sync.appspot.com",
-  messagingSenderId: "818553963570",
-  appId: "1:818553963570:web:fb1ce48c0943ae6a49282b",
-  measurementId: "G-486J0FPL4Q"
-};
-
-            // initialize firebase
-            firebase.initializeApp(firebaseConfig);
-            firebase.analytics();
-            
-        </script>
-    </head>
-    
-    <body>
-        <div id="token"></div>
-        <div id="msg"></div>
-        <div id="notis"></div>
-        <div id="err"></div>
-        <script>
-            MsgElem = document.getElementById('msg');
-            TokenElem = document.getElementById('token');
-            NotisElem = document.getElementById('notis');
-            ErrElem = document.getElementById('err');
-
-            const messaging = firebase.messaging();
-            messaging.requestPermission()
-                .then(function () {
-                    MsgElem.innerHTML = 'Notification permission granted.' 
-                    console.log('Notification permission granted.');
-
-                    // get the token in the form of promise
-                    return messaging.getToken()
-                })
-                .then(function(token) {
-                    TokenElem.innerHTML = 'token: ' + token
-                })
-                .catch(function (err) {
-                    ErrElem.innerHTML =  ErrElem.innerHTML + '; ' + err
-                    console.log('Unable to get permission to notify.', err);
-                });
-
-            messaging.onMessage(function(payload) {
-                console.log('Message received. ', payload);
-                NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload) 
-
-                response = payload.hasOwnProperty('notification') ? payload.notification : payload.data;
-                navigator.clipboard.writeText(response.message)
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script>
+    <script>
+      const channel = new BroadcastChannel("sw-messages");
+      channel.addEventListener("message", (event) => {
+        console.log("Received from bg", event.data);
+        navigator.clipboard
+          .writeText(eventdata)
           .then(() => {
-            console.log(' copied to clipboard:', response.message);
+            console.log(" copied to clipboard:", event.data);
           })
           .catch((error) => {
-            console.error('Failed to copy text to clipboard:', error);
+            console.error("Failed to copy text to clipboard:", error);
           });
-                notificationTitle = response.message;
-                notificationOptions = {
-                    body: response.body,
-                    icon: response.icon,
-                    image: response.image
-                };
-                var notification = new Notification(notificationTitle,notificationOptions);
-                
-            });
-        </script>
-    </body>
+      });
+
+      
+    </script>
+
+    <script>
+      // web app's firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyDBE3WoR8yrVhKRHFus_QoV4oSCz5-2n4k",
+        authDomain: "copy-n-sync.firebaseapp.com",
+        projectId: "copy-n-sync",
+        storageBucket: "copy-n-sync.appspot.com",
+        messagingSenderId: "818553963570",
+        appId: "1:818553963570:web:fb1ce48c0943ae6a49282b",
+        measurementId: "G-486J0FPL4Q",
+      };
+
+      // initialize firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
+  </head>
+
+  <body>
+    <div id="token"></div>
+    <div id="msg"></div>
+    <div id="notis"></div>
+    <div id="err"></div>
+    <script>
+      MsgElem = document.getElementById("msg");
+      TokenElem = document.getElementById("token");
+      NotisElem = document.getElementById("notis");
+      ErrElem = document.getElementById("err");
+
+      const messaging = firebase.messaging();
+      messaging
+        .requestPermission()
+        .then(function () {
+          MsgElem.innerHTML = "Notification permission granted.";
+          console.log("Notification permission granted.");
+
+          // get the token in the form of promise
+          return messaging.getToken();
+        })
+        .then(function (token) {
+          TokenElem.innerHTML = "token: " + token;
+        })
+        .catch(function (err) {
+          ErrElem.innerHTML = ErrElem.innerHTML + "; " + err;
+          console.log("Unable to get permission to notify.", err);
+        });
+
+      messaging.onMessage(function (payload) {
+        console.log("Message received. ", payload);
+        NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload);
+
+        response = payload.hasOwnProperty("notification")
+          ? payload.notification
+          : payload.data;
+        navigator.clipboard
+          .writeText(response.message)
+          .then(() => {
+            console.log(" copied to clipboard:", response.message);
+          })
+          .catch((error) => {
+            console.error("Failed to copy text to clipboard:", error);
+          });
+        notificationTitle = response.message;
+        notificationOptions = {
+          body: response.body,
+          icon: response.icon,
+          image: response.image,
+        };
+        var notification = new Notification(
+          notificationTitle,
+          notificationOptions
+        );
+      });
+    </script>
+  </body>
 </html>
