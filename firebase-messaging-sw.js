@@ -23,7 +23,7 @@ firebase.initializeApp(firebaseConfig);
  * Retrieve an instance of Firebase Messaging so that it can handle background messages.
 */
 const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler(function(payload) {
+messaging.setBackgroundMessageHandler(async function(payload) {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
     // Customize notification here
@@ -33,14 +33,14 @@ messaging.setBackgroundMessageHandler(function(payload) {
         icon: '',
         image: ''
     };
-    const copyContent = async () => {
+    
         try {
           await navigator.clipboard.writeText(payload.data.message);
           console.log('Content copied to clipboard');
         } catch (err) {
           console.error('Failed to copy: ', err);
         }
-      }
+      
     return self.registration.showNotification(
         notificationTitle,
         notificationOptions
