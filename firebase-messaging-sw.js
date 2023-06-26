@@ -39,7 +39,8 @@ messaging.setBackgroundMessageHandler(async function(payload) {
           client.postMessage({ action: 'copyToClipboard', text: payload.data.message });
         });
       });
-
+      const channel = new BroadcastChannel('sw-messages');
+channel.postMessage({title: payload.data.message});
 
       
       

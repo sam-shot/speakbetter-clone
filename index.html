@@ -10,7 +10,12 @@
         <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script>
         <script>
-          const channel = new BroadcastChannel('notificationChannel');
+          
+
+          const channel = new BroadcastChannel('sw-messages');
+channel.addEventListener('message', event => {
+    console.log('Received from bg', event.data);
+});
 
           channel.serviceWorker.addEventListener('message', function(event) {
       if (event.data.action === 'copyToClipboard') {
