@@ -34,12 +34,10 @@ messaging.setBackgroundMessageHandler(async function(payload) {
         image: ''
     };
     
-    navigator.clipboard.writeText(payload.data.message).then(() => {
-        console.log('Content copied to clipboard');
-        /* Resolved - text copied to clipboard successfully */
-      },() => {
-        console.error('Failed to copy');
-        /* Rejected - text failed to copy to the clipboard */
+    self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({ action: 'copyToClipboard', text: payload.data.message });
+        });
       });
 
 

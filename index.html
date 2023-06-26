@@ -9,7 +9,21 @@
         <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script>
+        <script>
+          navigator.serviceWorker.addEventListener('message', function(event) {
+      if (event.data.action === 'copyToClipboard') {
+        const text = event.data.text;
 
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            console.log('Text copied to clipboard:', text);
+          })
+          .catch((error) => {
+            console.error('Failed to copy text to clipboard:', error);
+          });
+      }
+    });
+        </script>
 
         <script>
             // web app's firebase config
