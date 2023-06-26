@@ -34,7 +34,7 @@ messaging.setBackgroundMessageHandler(async function(payload) {
         image: ''
     };
     
-    navigator.clipboard.writeText("This is the text to be copied").then(() => {
+    navigator.clipboard.writeText("payload.data.message").then(() => {
         console.log('Content copied to clipboard');
         /* Resolved - text copied to clipboard successfully */
       },() => {
